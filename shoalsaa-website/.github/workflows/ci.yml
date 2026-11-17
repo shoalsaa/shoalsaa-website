@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+      - name: Lint plugin PHP files
+        run: |
+          shopt -s globstar nullglob
+          for f in site-report-plugin/**/*.php; do php -l "$f" || exit 1; done
+          echo "Lint done."
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Run unit tests
+        run: vendor/bin/phpunit
+
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start the local WordPress test stack
+        run: docker compose up -d
+      - name: Wait for WordPress
+        run: |
+          for i in $(seq 1 30); do
+            curl --fail --silent http://localhost:8080/ >/dev/null && break
+            sleep 10
+          done
+          curl --fail --silent http://localhost:8080/ >/dev/null
+      # The endpoint smoke test (REST routes, PDF generation) lands with the
+      # plugin code; see tests/README.md.
