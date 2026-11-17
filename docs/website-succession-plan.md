@@ -8,9 +8,9 @@
 
 This summary is written for the officers and the sponsoring body. It states the risk, the approach, the cost, and the decisions asked of the committee, in plain language. The rest of the document is the method for carrying those decisions out.
 
-**Why this is before the committee.** The district's website, its email, and its published phone number are run by one person, and only that person knows how to get into them. That is not a criticism — it is how the site was built, and it is normal for a volunteer-run website. But it means the district's public face depends on one volunteer's continued health and availability. If that person were suddenly unable to act, the district could lose the ability to update its own website, read its own email, or change who its published phone number rings — and getting that access back from the companies involved is slow, and sometimes impossible. Roles in AA rotate about every two years, so this is not a distant risk; it is the next handover, whenever it comes. We already have a live example: nobody now knows who owns the Google account behind the district's 24-hour helpline number, and recovering it is a recurring problem (Section 4.1).
+**Why this is before the committee.** The district's website, its email, and its published help line phone number are each run by one person, and only that person knows how to get into them. That is not a criticism — it is how the site was built, and it is normal for a volunteer-run website. But it means that each of these parts of district's public face depends on one volunteer's continued health and availability. If that person were suddenly unable to act, the district could lose the ability to update its own website, read its own email, or change who its published phone number rings — and getting that access back from the companies involved is slow, and sometimes impossible. Roles in AA rotate about every two years, so this is not a distant risk; it is the next handover, whenever it comes. We already have a live example: nobody now knows who owns the Google account behind the district's 24-hour helpline number, and recovering it is a recurring problem (Section 4.1).
 
-**What this plan does.** It makes the district, not any one person, the owner of its own accounts, and it does so with three simple ideas.
+**What this plan does.** It makes **the District** - rather than any one person, the owner of its own accounts, and it does so with three simple ideas:
 
 - **Two people can always get in.** A named deputy has their own sign-in to every important system, so there is never a single point of failure.
 
@@ -20,7 +20,7 @@ This summary is written for the officers and the sponsoring body. It states the 
 
 **What it costs.** Modest: a paid password-manager plan (tens of dollars a year), three small security keys bought once, and a district-owned email address for each officer (of the order of $20 a year each on our existing hosting). The details, and the choices between products, are in Sections 6–7; no figure in this plan is a commitment — prices change, and the treasurer confirms them before anything is bought.
 
-**What we ask the committee to decide.** Five things (Section 14 and the list at the end of this document):
+**What we ask the committee to decide/approve.** Five things (Section 14 and the list at the end of this document):
 
 - **1.** which password manager to use;
 
@@ -30,7 +30,7 @@ This summary is written for the officers and the sponsoring body. It states the 
 
 - **4.** the date of the first practice drill;
 
-- **5.** whether every officer and committee chair gets a district-owned email address — secretary@ at minimum.
+- **5.** whether every officer and committee chair gets a district-owned email address — <Secretary@shoalsaa.org> and <DCM@shoalsaa.org>  at minimum, every committee chair and Alterate DCM preferred.
 
 **What happens if we do nothing.** Nothing changes on the surface — the site keeps working, as it does today. The risk stays exactly where it is: one person, holding all the keys, with no tested way back in. The cost of acting is small and the work is mostly one-off; the cost of discovering the gap in an emergency is a website, an email system, and a phone number the district cannot reach, at the moment it needs them most.
 
@@ -38,7 +38,7 @@ This summary is written for the officers and the sponsoring body. It states the 
 
 The Executive Summary is written for officers and the sponsoring body. Sections 1–4 explain the problem and the design. Sections 5–9 give the recommended setup in enough detail to implement it. Sections 10–12 turn it into procedures a committee can follow under pressure. Section 14 is a short policy written so a sponsoring body can vote on it as-is. The appendices are fill-in templates — copy them, do not complete them in this document.
 
-Shoals AA is used as the worked example because its shape is typical: a WordPress site, a hosting account, a domain, DNS, email, and off-site backups, all maintained by one person. Anywhere the text says [Organisation], [Maintainer], or [Service], another group can substitute its own names and keep the rest unchanged.
+Shoals AA is used as the worked example because its shape is typical: a WordPress site, a hosting account, a domain, DNS, email, and off-site backups, all maintained by one person. Anywhere the text says [Organisation], [Maintainer], or [Service], another group can substitute its own names and keep the rest unchanged. The web committe chair plans to share this document with the Area1 Technology Chair , and with Technology in AA
 
 Words used carefully in this document: a credential is a username plus its proof — a password, passkey, hardware key, or recovery code. A secret is any credential material that must not be shared in plain text. The vault is the password manager or encrypted database where secrets live day to day. Break-glass access is the emergency route into the vault when the normal route has failed.
 
@@ -86,7 +86,7 @@ Every role appointment is recorded in the organisation's minutes with a name and
 | Maintainer | Webservant / web-committee chair | Day-to-day operation; keeps the inventory and vault current; trains the deputy; initiates planned handover. |
 | Deputy maintainer | Named second administrator | Has own admin access everywhere critical; performs at least one real task per quarter so access stays live; first successor. |
 | Break-glass custodians (2–3) | Trusted officers, not the maintainer | Each holds one sealed share or envelope (Section 8); produce it only under the conditions in Section 10; attend the annual drill. |
-| Treasurer / payer | Organisation treasurer | Pays for domain, hosting, vault and keys from organisation funds; confirms renewals; holds no website secrets by virtue of paying. |
+| Treasurer / payer | Organisation treasurer | Pays for domain, hosting, vault and keys from organisation funds; confirms renewals; holds no website or other secrets by virtue of paying. |
 
 ## 4  Scope: the systems a website actually depends on
 
@@ -96,7 +96,7 @@ A website is never one account. Losing any row in this table can lose the site, 
 | --- | --- | --- |
 | Domain registration | Controls the name itself; loss here loses everything below it. | shoalsaa.org — registrar of record to be confirmed in the inventory |
 | DNS | Directs the name to the site and email; can silently redirect both. | Nameservers point to Cloudflare (per website manual) |
-| Hosting provider | Holds the site files, database and panel access. | DreamHost — shared hosting account |
+| Hosting provider | Holds the site files, database and panel access. Each of half a dozen functions has its own set of credentials. | DreamHost — shared hosting account |
 | Website CMS | Day-to-day administration of content and plugins. | WordPress — administrator accounts, update and backup plugins |
 | Site email | Receives password resets for almost everything else. | <webservant@shoalsaa.org> and any role mailboxes |
 | 24-hour helpline | The published contact number; callers reach the answering list. Whoever controls this account controls the district's public phone line. | Google account behind 256-415-7719 (likely Google Voice) — owner and password currently UNKNOWN; see Section 4.1 |
@@ -110,7 +110,7 @@ The helpline is the sharpest illustration of this plan's problem, and it is wors
 
 Recovery, where it is possible at all, is through Google's own account recovery: the "Find your email" page will reveal the username for a phone number when the account holder's first and last name are supplied, if the number is attached to the account. That needs a name the district may no longer know. If recovery fails, the honest fallback is to obtain a new number under an account the district controls from the start — registered to a role mailbox, listed in the inventory, its credentials in the vault — and update the website and every listing that carries the old number. Either way, the lesson is the same: an account that is not inventoried, with its owner named and its credentials in the vault, is an account the organisation has already lost and does not yet know it.
 
-The same reasoning applies to every officer and committee chair. District business conducted through personal email addresses leaves the district's correspondence, contacts, and account recoveries in the hands of whoever held the office, and they vanish with the holder. The recommendation is a district-owned role mailbox for every officer and committee chair — <secretary@shoalsaa.org> at minimum — registered to the office rather than the person, so the address and its contents move with the office at rotation. A role mailbox costs little (a further mailbox on the district's existing email hosting is of the order of $20 a year, against $84 a year per user for a Google Workspace seat) and it is what makes the rest of this plan enforceable: it is the address the accounts are registered to, the address password resets go to, and the address a successor inherits on day one.
+The same reasoning applies to every officer and committee chair. District business conducted through personal email addresses leaves the district's correspondence, contacts, and account recoveries in the hands of whoever held the office, and they vanish with the holder. The recommendation is a district-owned role mailbox for every officer and committee chair — <DCM@shoalsaa.org> and <secretary@shoalsaa.org> at minimum — registered to the office rather than the person, so the address and its contents move with the office at rotation. A role mailbox costs little (a further mailbox on the district's existing email hosting is of the order of $20 a year, against $84 a year per user for a Google Workspace seat) and it is what makes the rest of this plan enforceable: it is the address the accounts are registered to, the address password resets go to, and the address a successor inherits on day one.
 
 ## 5  The inventory: what must be recorded, and what must not
 
