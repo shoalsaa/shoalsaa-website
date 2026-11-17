@@ -291,7 +291,7 @@ Copy this table into a spreadsheet or document held with the organisation's stan
 One log, held by the sponsoring body's secretary — not stored with any envelope or share. Record creation, inspection, opening, and re-sealing. Never record the contents.
 
 | Date | Item (envelope / share no.) | Action & authorisation | Custodians present / signatures |
-| --- | --- | --- | --- |
+|  |  |  |  |
 |  |  | Created / inspected / opened / re-sealed — minute reference: |  |
 |  |  |  |  |
 |  |  |  |  |
@@ -323,12 +323,12 @@ Outgoing: [name]  •  Incoming: [name]  •  Date started: [date]  •  Date co
 
 - Completion reported to and minuted by the sponsoring body.
 
-*Signed — Outgoing: ______________________    Incoming: ______________________    Officer: ______________________*
+<Signed — Outgoing: ______________________    Incoming: ______________________    Officer: ______________________>
 
 ## Appendix D  Drill and review log
 
 | Date | Type (quarterly / annual / rotation) | What was tested | What failed & fix / owner / due |
-| --- | --- | --- | --- |
+|  |  |  |  |
 |  |  |  |  |
 |  |  |  |  |
 |  |  |  |  |
