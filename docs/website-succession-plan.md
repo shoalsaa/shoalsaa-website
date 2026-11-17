@@ -290,12 +290,10 @@ Copy this table into a spreadsheet or document held with the organisation's stan
 
 One log, held by the sponsoring body's secretary — not stored with any envelope or share. Record creation, inspection, opening, and re-sealing. Never record the contents.
 
-| Date | Item (envelope / share no.) | Action & authorisation | Custodians present / signatures |
-|  |  |  |  |
-|  |  | Created / inspected / opened / re-sealed — minute reference: |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+| Date | Item (envelope / share no.) | Action & authorisation | Custodians present / signatures | Created / inspected / opened / re-sealed — minute reference |
+| --- | --- | --- | --- | --- |
+|  |  |  |  |  |
+|  |  |  |  |  |
 
 ## Appendix C  Handover sign-off checklist
 
@@ -327,11 +325,13 @@ Outgoing: [name]  •  Incoming: [name]  •  Date started: [date]  •  Date co
 
 ## Appendix D  Drill and review log
 
-| Date | Type (quarterly / annual / rotation) | What was tested | What failed & fix / owner / due |
+| Date | Type (quarterly / annual / rotation) | What was tested | What failed / fix / owner / due |
+| --- | --- | --- | --- |
 |  |  |  |  |
 |  |  |  |  |
 |  |  |  |  |
 |  |  |  |  |
+
 |  |  |  |  |
 
 ## Appendix E  Adapting this plan to another project
