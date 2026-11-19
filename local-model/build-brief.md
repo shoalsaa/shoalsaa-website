@@ -8,7 +8,8 @@ uploaded anywhere.
 
 `docs/site-report-plugin-design.md` — read it fully. It is the spec.
 Decisions already made (17 November 2026): Phase 1 only; the monthly
-report is a PDF built by the plugin with TCPDF.
+report is a PDF built by the plugin with TCPDF. When complete, it is atached to an email and sent to <webservant@shoalsaa.org>.
+Note: make the email destination is configurable, with <webservant@shoalsaa.org> as the default value
 
 ## Build
 
@@ -22,8 +23,8 @@ version 0.1.0, for WordPress 7.1.4 / PHP 8.4.27:
    same handlers.
 2. One PDF ability: `shoalsaa-report/get-monthly-report-pdf`. Builds the
    monthly report as a PDF with TCPDF. States the origin site's own URL at
-   the top (never a hardcoded live URL). Accepts OPTIONAL Cloudflare figures
-   as input (visitors, requests, cached %, period dates); when absent, the
+   the top (never a hardcoded live URL). For the docker hosted test site localhost: port# is acceptable.
+   Accepts OPTIONAL Cloudflare figures  as input (visitors, requests, cached %, period dates); when absent, the
    PDF must state plainly that Cloudflare figures were not obtained.
 3. TCPDF: bundle the plugin's OWN copy (tecnickcom/tcpdf, from its official
    source) under the plugin's `vendor/` directory. Do NOT depend on the copy
@@ -49,6 +50,7 @@ version 0.1.0, for WordPress 7.1.4 / PHP 8.4.27:
   that updates, installs, activates, or changes anything on the site.
 - No secrets, keys, tokens, or credentials anywhere in the code.
 - Do not modify the design document.
+- All code must meet Wordpress Coding standards. see <https://github.com/WordPress/WordPress-Coding-Standards/tree/develop/.github>.
 
 ## Deliverables
 
@@ -57,10 +59,12 @@ version 0.1.0, for WordPress 7.1.4 / PHP 8.4.27:
 - `BUILD-NOTES.md` in the plugin folder: what was verified from public
   sources (with links), every item still needing live verification, and a
   step-by-step install + test checklist for the local Docker stack
-  (`docker/README.md`) and then test.shoalsaa.org.
+  (`docker/README.md`)
+ test.shoalsaa.org. ( 'Online-Test/Build_Online.md')
+
 
 ## Test it
 
-`docker compose up -d` from the repo root, open http://localhost:8080,
+`docker compose up -d` from the repo root, open localhost:Wordpress-docker-container-port,
 activate the plugin, call each REST route with a test Application
 Password, and compare every figure against the WP Admin screens.
