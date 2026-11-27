@@ -90,6 +90,29 @@ while trying to recover. After a backup, inspect the WPvivid log and retry only
 if WPvivid's workflow supports safely resuming or restarting. If it fails
 again, enable PHP error logging before retrying to capture a more useful cause.
 
+### User
+
+Requested a local WordPress admin account with username `districtone` and a
+configured password.
+
+### Assistant
+
+Added Compose environment variables for one-time local admin creation and
+updated `docker/wordpress-entrypoint.sh` to install the account only when
+WordPress is uninstalled. Troubleshooting found the container entrypoint had
+Windows CRLF line endings, then revealed that the existing `wordpress_data`
+volume contained core files but no `wp-config.php`. The entrypoint was fixed to
+copy the config whenever it is missing, and the WordPress CLI bootstrap was
+updated to use install mode and localhost request variables.
+
+Verified: the WordPress image rebuilt, Compose restarted the WordPress service
+without deleting the named volumes, all services were running, the `wp_users`
+table contained `districtone`, and WordPress confirmed the configured password
+matched the user's hash. `http://localhost:8080/wp-login.php` returned HTTP 200
+with a login form. These Compose credentials are local-test credentials only;
+change them before exposing the stack beyond the local machine. Bootstrap does
+not reset credentials for an already-installed WordPress site.
+
 ## Files and behavior
 
 - `docker-compose.yml` runs MySQL, WordPress, and Mailpit.

@@ -1,6 +1,7 @@
 # Local WordPress test site for the ShoalsAA site-report plugin.
 # Test-only credentials; do not use this stack with production data or passwords.
-# Run from the repository root: docker compose up --pull always -d
+# Build the local WordPress image first: docker compose build wordpress
+# Start the built image: docker compose up -d --no-build
 # WordPress: http://localhost:8080 | Mailpit UI: http://localhost:8025
 services:
   db:
@@ -37,6 +38,10 @@ services:
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_HOME: http://localhost:8080
       WORDPRESS_SITEURL: http://localhost:8080
+      # Local-only bootstrap credentials, used only to install a fresh database.
+      WORDPRESS_ADMIN_USER: districtone
+      WORDPRESS_ADMIN_PASSWORD: District1
+      WORDPRESS_ADMIN_EMAIL: webservant@shoalsaa.org
     volumes:
       - wordpress_data:/var/www/html
       - ./site-report-plugin:/var/www/html/wp-content/plugins/shoalsaa-site-report
