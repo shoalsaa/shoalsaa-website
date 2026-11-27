@@ -223,7 +223,7 @@ All checked 15 November 2026 unless dated otherwise. Nothing here is assumed.
 
 - Live site: <https://www.shoalsaa.org>. MCP Adapter is NOT installed on the live site.
 
-- Succession plan: Website Succession Plan, November 2026 (goal files, website-succession-plan/website-succession-plan.docx) — key custody and handover principles this design follows. (will move to a new project: D:\Github_projects/Website-succession-plan)
+- Succession plan: Website Succession Plan, November 2026 — key custody and handover principles this design follows. It covers more than the website, so it lives in its own repository (Website-succession-plan), not in this one.
 
 | Data the reports need | WordPress source | Notes |
 | --- | --- | --- |

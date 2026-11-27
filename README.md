@@ -9,8 +9,6 @@ Maintained by the District 1 Web-Committee Chair (webservant@shoalsaa.org).
   plugin that will feed the daily inventory email and the monthly status
   report (first pass, 15 November 2026; Phase 1 and the monthly PDF decided
   17 November 2026). The plugin itself is not built yet.
-- `docs/website-succession-plan.md` — succession plan for the website and the
-  secrets that run it (first-pass draft, November 2026).
 - `site-report-plugin/` — the plugin source, once it is built. Test-site first;
   nothing goes on the live site until the webservant has tested it there.
 - `docker-compose.yml` + `docker/README.md` — a local WordPress test site
