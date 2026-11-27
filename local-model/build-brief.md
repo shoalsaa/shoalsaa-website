@@ -1,12 +1,14 @@
 # Build brief for a local model (Ollama)
 
 Use this brief when asking a local coding model to build the contained
-site-report plugin. The human (Rob) reviews everything before it is
+site-report plugin. The webservant reviews everything before it is
 uploaded anywhere.
 
 ## Read first
 
-`docs/site-report-plugin-design.md` — read it fully. It is the spec.
+`docs/site-report-plugin-design.md` — read it fully. It is the spec. This
+brief turns it into build steps; where the two differ, the design document
+wins.
 The 20 November 2026 revision establishes the current architecture:
 implement one plugin, contained entirely within WordPress, with no public
 inbound endpoints. The plugin collects data internally, schedules its own
@@ -85,11 +87,13 @@ Checked 17 November 2026 against the public plugin sources
 - Read-only by design. No inbound REST or reporting endpoints and no code
   that updates, installs, activates, or changes anything on the site.
 - No secrets, keys, tokens, or credentials anywhere in the code.
-- All plugin PHP must meet WordPress Coding Standards:
-  <https://github.com/WordPress/WordPress-Coding-Standards/tree/develop/.github>.
-- The monthly email states the origin site's own URL at the top (never a
-  hardcoded live URL). Any data source that cannot be reached is stated
-  as not checked — never invent a number.
+- All plugin PHP must meet the WordPress Coding Standards:
+  <https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/>.
+- Every email (daily and monthly) states the origin site's own URL at the
+  top (never a hardcoded live URL). Any data source that cannot be reached
+  is stated as not checked — never invent a number.
+- Schedule times and report dates use the site's WordPress time zone
+  (America/Chicago on the district sites), not UTC.
 - Do not modify the design document.
 
 ## The chunks
@@ -101,7 +105,7 @@ Work through these in order, one chat (or one prompt) per chunk.
 Main file with the plugin header, activation that does nothing but
 record the version, and `readme.txt` with installation + testing notes.
 Register the daily 08:00 WP-Cron event and a custom interval for the
-Sunday/month-end check. Provide admin buttons for manually triggering both
+Sunday 07:00 last-Sunday-of-the-month check, both in the site time zone. Provide admin buttons for manually triggering both
 reports during development and testing.
 
 **Chunk 1 — inventory and changes.** Internal inventory collection:
@@ -136,16 +140,24 @@ reads Cloudflare analytics through its GraphQL `GetZoneAnalytics` query.
 Reuse the same WordPress-hosted authentication pattern: bearer token from
 `cloudflareAuth.token`, falling back to `cloudflareAuth.email` and
 `cloudflareAuth.api_key`. Resolve the zone ID for the origin hostname and
-query the exact reporting period. Include visitors/uniques, requests,
+query the exact reporting period. The reporting period runs from the
+previous monthly report's run up to the morning of this run (first run:
+from 00:00 on the first day of that month); use the same period for Burst.
+If a source can only return a rolling window, report that window's dates
+and say it is not the exact period. Include visitors/uniques, requests,
 cached bytes/requests, total bytes, threats, and period dates. If the
 credentials or API cannot be reached, state that Cloudflare was not checked.
 
-**Chunk 4 — reports and email.** Assemble the daily inventory email and the
-monthly plain-text status email. Every report must state the origin site's
-own URL at the top, never a hardcoded live URL. Send to the configurable
-recipient with `wp_mail` and Post SMTP.
+**Chunk 4 — daily email and sending.** Assemble the daily plain-text
+inventory email: origin URL at the top, inventory, changes since the daily
+snapshot, updates pending, and the WPvivid backup status (with the failed-
+backup notice and disabled-schedule WARNING). Write the shared sending code
+used by both reports: send to the configurable recipient with `wp_mail`
+(delivered by Post SMTP).
 
-**Chunk 5 — monthly email.** Include origin URL, reporting period,
+**Chunk 5 — monthly email.** Assemble the monthly plain-text status email
+and send it with the Chunk 4 sending code. Include origin URL at the top,
+reporting period,
 inventory, changes, updates, the exact same WPvivid backup status fields
 used in the daily email, Burst figures, and monthly Cloudflare figures obtained through App for Cloudflare's
 GraphQL zone-analytics path. When Cloudflare cannot be reached, state
@@ -169,8 +181,10 @@ email delivery, and both email formats.
   checklist: Stage 1 local Docker basic integration (`docker/README.md`),
   followed only after it passes by Stage 2 data verification on
   dev.shoalsaa.org.
-- An online-test build document when one is needed, for example
-  `Online-Test/Build_Online.md`.
+- A dev-site test document when one is needed, for example
+  `docs/dev-site-test.md`. Keep it outside `site-report-plugin/`, because
+  the deploy copies everything in that folder (except `README.md`) to the
+  site.
 
 ## Test it
 
@@ -181,8 +195,8 @@ unavailable-data behavior. Do not treat local data as production data.
 
 **Stage 2 — staging:** only after Stage 1 passes, deploy to
 dev.shoalsaa.org (merge to `main`; see `docs/deploy.md`) and compare each data source and both emails against the
-admin screens. Do not install on the live site without Rob's explicit
-approval.
+admin screens. Do not install on the live site without the webservant's
+explicit approval.
 Use `docker-compose.yml` as the source of truth for local test environment
 values; do not duplicate or assume its database credentials elsewhere.
 Configure local Post SMTP to use the Mailpit service on port 1025 and

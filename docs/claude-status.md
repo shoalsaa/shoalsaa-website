@@ -29,8 +29,8 @@ about it.
 | [../.github/workflows/deploy.yml](../.github/workflows/deploy.yml) / [deploy.md](deploy.md) | design doc §8 (Stage 1 before dev) | H |
 | [todo.md](todo.md) | design doc, git history (nested folder gone) | A, B, C, E |
 | [project-history.md](project-history.md) | docker/README.md | B, K |
-| [build-brief-comparison.md](build-brief-comparison.md) | current build brief, design doc | B, C |
-| [duplicates-subfolder.md](duplicates-subfolder.md) | current repo layout | B |
+| [build-brief-comparison.md](archive/build-brief-comparison.md) | current build brief, design doc | B, C |
+| [duplicates-subfolder.md](archive/duplicates-subfolder.md) | current repo layout | B |
 | [../local-model/prompt-chunking.md](../local-model/prompt-chunking.md) | build-brief.md, design doc | B, C |
 | [../site-report-plugin/README.md](../site-report-plugin/README.md) | design doc (no phasing) | C, J |
 | [README.md](README.md) (docs) | its own location | L |
@@ -63,8 +63,8 @@ about it.
 - [project-history.md](project-history.md) (2026-11-21 and 2026-11-22): the
   "do not run the nested copy" warnings. These are history, but they read as
   if they still apply.
-- [build-brief-comparison.md](build-brief-comparison.md) and
-  [duplicates-subfolder.md](duplicates-subfolder.md) compare files that no
+- [build-brief-comparison.md](archive/build-brief-comparison.md) and
+  [duplicates-subfolder.md](archive/duplicates-subfolder.md) compare files that no
   longer exist. The comparison describes a brief (Phase 1, TCPDF, REST
   routes, MCP flag) that is no longer the current one.
 - [../local-model/prompt-chunking.md](../local-model/prompt-chunking.md) is a
@@ -85,7 +85,7 @@ and no inbound endpoints. These files still say otherwise:
   "**Phase 1** of the site-report plugin goes in this directory".
 - [../local-model/prompt-chunking.md](../local-model/prompt-chunking.md):
   its proposed layout includes `05-monthly-pdf.md`.
-- [build-brief-comparison.md](build-brief-comparison.md): TCPDF, four JSON
+- [build-brief-comparison.md](archive/build-brief-comparison.md): TCPDF, four JSON
   abilities plus REST routes, and Phase 1.
 - [todo.md:3](todo.md#L3): the heading "Confirm monthly report format" sits
   over a decision that is already confirmed.
@@ -215,12 +215,35 @@ and no inbound endpoints. These files still say otherwise:
 
 ### Recommendations — 2026-11-27
 
-In priority order. None of these changes has been made yet.
+In priority order.
 
-Update 2026-11-27: items 1–5 are done (uncommitted at the time of writing).
+Update 2026-11-27: items 1–5 are done (merged in PRs #4 and #5).
 For item 3, dev.shoalsaa.org is the backup source. For item 4,
 `composer.lock` is now committed. Item 5 uses separate daily and monthly
 snapshots. Item 6 (the dev password) is left to Rob.
+
+Update 2026-11-27 (later): items 7–13 are done on branch
+`docs/scope-cleanup`. Decisions made by Rob:
+
+- Item 7: the two comparison docs moved to `docs/archive/` with a note;
+  the nested-folder section is gone from todo.md, and the history and
+  readme-Docker.md entries are marked superseded.
+- Item 9: the design doc is the build specification; the build brief says
+  the design wins where they differ. §2 Scope added (no renumbering, so
+  references to §8 still work).
+- Item 10: "read-only" is defined in design §7; the todo item is closed.
+- Item 11: schedules use the site time zone (America/Chicago, to be
+  confirmed on dev and live, now a todo item). Monthly usage covers an exact
+  period, from the previous monthly run to this run, with rolling windows
+  only as a labelled fallback.
+- Item 12: approvals belong to "the webservant" in the design doc, build
+  brief and plugin README.
+- Item 13: the origin URL is on every email; chunk 4 is the daily email and
+  shared sending, chunk 5 the monthly email; one WPCS link
+  (developer.wordpress.org) in the build brief and docker/README.md; the
+  dev-site test document is `docs/dev-site-test.md`.
+
+Items 14–20 (tooling and Docker docs) are still open.
 
 **Fix now (they affect correctness or safety)**
 
@@ -251,8 +274,8 @@ snapshots. Item 6 (the dev password) is left to Rob.
 7. **Rewrite or retire the nested-folder material**: delete the "Reconcile
    root and nested project copies" section from [todo.md](todo.md), cut the
    nested-copy wording from readme-Docker.md, and move
-   [build-brief-comparison.md](build-brief-comparison.md) and
-   [duplicates-subfolder.md](duplicates-subfolder.md) to a `docs/archive/`
+   [build-brief-comparison.md](archive/build-brief-comparison.md) and
+   [duplicates-subfolder.md](archive/duplicates-subfolder.md) to a `docs/archive/`
    folder (or delete them; git history keeps them).
 8. **Remove the leftover PDF, REST and phase wording**: the ci.yml comment,
    "Phase 1" in the plugin README, the todo heading, and the design §6
