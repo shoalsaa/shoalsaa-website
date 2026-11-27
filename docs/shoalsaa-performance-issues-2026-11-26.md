@@ -1,3 +1,6 @@
+
+# Shoalsaa performance issues 2026-11-26
+
 The “Issues were logged in the Issues panel in Chrome DevTools” Lighthouse audit is a diagnostic flag, not a measurement of page speed. It means Chrome detected one or more browser-level problems while loading or using the page and recorded them in DevTools > Issues.
 
 What it checks
