@@ -220,10 +220,13 @@ In priority order.
 Update 2026-11-27: items 1–5 are done (merged in PRs #4 and #5).
 For item 3, dev.shoalsaa.org is the backup source. For item 4,
 `composer.lock` is now committed. Item 5 uses separate daily and monthly
-snapshots. Item 6 (the dev password) is left to Rob.
+snapshots.
 
-Update 2026-11-27 (later): items 7–13 are done on branch
-`docs/scope-cleanup`. Decisions made by Rob:
+Update 2026-11-27: item 6 is done. Rob verified that the dev.shoalsaa.org
+admin password differs from the local Docker one in `docker-compose.yml`.
+
+Update 2026-11-27 (later): items 7–13 are done (merged in PR #6, branch
+`docs/scope-cleanup`). Decisions made by Rob:
 
 - Item 7: the two comparison docs moved to `docs/archive/` with a note;
   the nested-folder section is gone from todo.md, and the history and
@@ -243,7 +246,17 @@ Update 2026-11-27 (later): items 7–13 are done on branch
   (developer.wordpress.org) in the build brief and docker/README.md; the
   dev-site test document is `docs/dev-site-test.md`.
 
-Items 14–20 (tooling and Docker docs) are still open.
+Update 2026-11-27 (later): item 14 is done on branch `chore/wpcs-check`.
+WPCS 3 is a Composer dev dependency (phpcs installer allowed); the
+`phpcs.xml.dist` ruleset checks `site-report-plugin/` against the full
+WordPress standard with the `shoalsaa-site-report` text domain and
+`shoalsaa_site_report` prefix; CI runs `vendor/bin/phpcs` after
+`composer install`. `composer lint` / `composer lint:fix` run it locally.
+The manual `composer require` line is gone from docker/README.md. Also:
+`composer.json` declares the MIT license, and `.gitignore` ignores the
+PHPUnit result cache.
+
+Items 15–20 (Docker docs and cleanup) are still open.
 
 **Fix now (they affect correctness or safety)**
 

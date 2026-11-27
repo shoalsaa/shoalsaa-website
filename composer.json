@@ -1,1 +1,20 @@
-{"description":"Code and documents for the AA District 1 website, shoalsaa.org","name":"shoalsaa/shoalsaa-website","require-dev":{"brain/monkey":"^2.0","phpunit/phpunit":"^11.0"},"scripts":{"test":"vendor/bin/phpunit"}}
+{
+    "name": "shoalsaa/shoalsaa-website",
+    "description": "Code and documents for the AA District 1 website, shoalsaa.org",
+    "license": "MIT",
+    "require-dev": {
+        "brain/monkey": "^2.0",
+        "phpunit/phpunit": "^11.0",
+        "wp-coding-standards/wpcs": "^3.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "lint": "phpcs",
+        "lint:fix": "phpcbf"
+    }
+}

@@ -3,3 +3,5 @@ Thumbs.db
 *.log
 /local-backups/
 /vendor/
+/.phpunit.result.cache
+/.phpunit.cache/

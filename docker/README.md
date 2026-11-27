@@ -65,4 +65,4 @@ This is Stage 1 of the testing plan. Complete it before Stage 2 on
   completely fresh: `docker compose down -v`. ASK for permission before doing this.
 - Nothing here talks to shoalsaa.org, dev.shoalsaa.org, or DreamHost directly.
 - All plugin code should meet the WordPress coding standards (see <https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/>). Set up VS Code with the recommended extensions (`.vscode/extensions.json`).
-- Install the WordPress standards: `composer config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true` then `composer require --dev wp-coding-standards/wpcs:"^3.0"`.
+- Check the plugin against the standards with `composer lint` (rules in `phpcs.xml.dist`); `composer lint:fix` fixes what it can automatically. WPCS is already a dev dependency, so `composer install` sets it up. CI runs the same check.

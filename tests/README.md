@@ -40,4 +40,6 @@ then integration checks are manual.
 ## CI
 
 `.github/workflows/ci.yml` runs on every push and pull request: PHP lint of
-the plugin files, the unit suite, and a boot check of the Docker stack.
+the plugin files, the WordPress Coding Standards check (`composer lint`,
+rules in `phpcs.xml.dist`), the unit suite, and a boot check of the Docker
+stack.

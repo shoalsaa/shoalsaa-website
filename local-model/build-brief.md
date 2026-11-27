@@ -167,7 +167,8 @@ number.
 **Chunk 6 — tests.** PHPUnit + Brain Monkey unit tests in `tests/Unit`
 (see `tests/README.md`): snapshot diffing, report assembly, email content,
 and scheduling logic. Run `composer install`, then `vendor/bin/phpunit`.
-Lint all plugin PHP against the WordPress Coding Standards. Verify the
+Check all plugin PHP against the WordPress Coding Standards with
+`composer lint` (rules in `phpcs.xml.dist`); it must report no errors. Verify the
 Docker stack, activation, scheduled-event registration, manual buttons,
 email delivery, and both email formats.
 
