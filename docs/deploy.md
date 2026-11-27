@@ -16,6 +16,22 @@ WPvivid.
   WP Admin after the site has been checked.
 - Until `site-report-plugin/` contains PHP files, the workflow does nothing.
 
+## Branching and merge
+
+Because every green CI run on `main` deploys to dev, a merge to `main` is a
+deploy. CI only lints and runs unit tests; it does not run Stage 1 (the local
+Docker integration test in `docs/site-report-plugin-design.md` §8). So:
+
+- Do all plugin work on a branch, never directly on `main`.
+- Run Stage 1 on the local Docker site from that branch.
+- Merge to `main` (through a pull request) only after Stage 1 passes. The
+  merge is what starts Stage 2 on dev.
+- Documentation-only changes may merge without Stage 1; they deploy nothing,
+  because the workflow copies only `site-report-plugin/`.
+
+Recommended: in GitHub (Settings → Branches), protect `main` so changes
+arrive only through a pull request with CI passing.
+
 ## What there is to deploy
 
 The test target, <https://dev.shoalsaa.org>, is a WordPress site (WordPress

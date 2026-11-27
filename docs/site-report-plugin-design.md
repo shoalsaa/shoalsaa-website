@@ -7,7 +7,7 @@ District 1, Area 1 AA — shoalsaa.org
 15 November 2026 — Prepared for Rob, District 1 Web-Committee Chair
 20 November 2026 -- revised, eliminate phasing, implement as totally contained in the plugin,no inbound endpoints exposed to the outside world.
 27 November 2026 -- test target changed to <https://dev.shoalsaa.org> (replacing test.shoalsaa.org); plugin files reach it through the automated deploy in `docs/deploy.md`.
-27 November 2026 -- no phase 2 plan, just a plugin for the website to generate 2 reports and email them on a schedule to <wevservant@shoalsaa.org>
+27 November 2026 -- no phase 2 plan, just a plugin for the website to generate 2 reports and email them on a schedule to <webservant@shoalsaa.org>
 Status: 2nd pass, for review. This is a design, not a build specification.
 
 ## 1. Purpose
@@ -47,7 +47,7 @@ Every item below is data the reports are expected to contain is read from inside
 | Updates pending (core, plugins, themes) | wp_get_update_data() / update transients | Counts and available versions; empty when nothing is pending. |
 | Burst usage (visitors, pageviews, sessions, top pages, date range) | Burst's own database tables or REST endpoints — TO BE VERIFIED on the test site | Burst 3.7.5. Exact period (e.g. 16 Oct–15 Nov 2026: 354 visitors, 902 pageviews, 570 sessions) comes from the Burst statistics page today; the plugin must find the same data at its source. Do not assume table names — confirm during the build. |
 | WPvivid backup status (version, schedule, last/next backup, last result) | WPvivid's stored options — TO BE VERIFIED on the test site <https://dev.shoalsaa.org>. | WPvivid 0.9.140. Backup Schedule is Enabled; server time, recurrence, last backup 13 Nov 2026 14:50 (Succeeded), and next backup Monday 30 Nov 2026 00:02 are included in both reports without archive or restore verification. A failed last result is prominent notification in the daily report and remains in the monthly report. A disabled schedule is labeled WARNING in both reports. Confirm the option names during the build. |
-| Changes since last report (version moves, plugins added/removed) | Plugin-kept snapshot (a WordPress option) diffed on each run | The plugin stores the last inventory it produced and reports what moved. This replaces the external changes log for version changes. |
+| Changes since last report (version moves, plugins added/removed) | Two plugin-kept snapshots (WordPress options): a daily snapshot and a monthly snapshot | The daily report diffs against the daily snapshot, then replaces it. The monthly report diffs against the monthly snapshot (saved by the previous monthly report), then replaces it; the daily run never touches the monthly snapshot, so the monthly diff covers the whole month. When a snapshot does not exist yet (first run), the report says no earlier snapshot was available and saves the baseline. A manual (admin-button) run uses the same snapshot as its scheduled report. This replaces the external changes log for version changes. |
 | Cloudflare usage | App for Cloudflare stored authentication and Cloudflare GraphQL API | Reuse the same WordPress-hosted credentials and zone/hostname lookup used by App for Cloudflare: bearer token at `cloudflareAuth.token`, or email/API-key fallback. Query `GetZoneAnalytics` with the exact reporting period and include unique visitors, requests, cached requests/bytes, bytes, threats, and period dates. If credentials or the API cannot be reached, report Cloudflare as not checked rather than inventing values. |
 
 ## 5. Scheduling
@@ -82,6 +82,11 @@ Testing proceeds in two stages. Complete and pass Stage 1 before installing
 the plugin on `dev.shoalsaa.org`. The live site is not touched unless Rob
 later explicitly approves it.
 
+Branching and merge: every green CI run on `main` deploys the plugin to dev,
+and CI does not run Stage 1. Develop on a branch, run Stage 1 from that
+branch, and merge to `main` only after Stage 1 passes (see
+`docs/deploy.md`, "Branching and merge").
+
 ### Stage 1 — local Docker site (basic integration)
 
 Use the local WordPress environment documented in `docker/README.md`.
@@ -107,8 +112,8 @@ Configure Post SMTP to deliver only to Mailpit.
 Proceed only after Stage 1 passes. Sign in as `districtone`; do not test on
 the live site.
 
-1. Merge to `main`; the deploy workflow copies the plugin to dev once CI
-   passes. Activate it in WP Admin. Confirm clean activation, Site Health,
+1. Merge the branch to `main` (only after Stage 1 passes); the deploy
+   workflow copies the plugin to dev once CI passes. Activate it in WP Admin. Confirm clean activation, Site Health,
    and debug log.
 2. Compare inventory, updates, Burst statistics, and WPvivid schedule/last/
    next-backup fields against the corresponding WordPress admin screens.

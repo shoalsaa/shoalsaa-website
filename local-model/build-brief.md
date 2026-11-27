@@ -111,8 +111,13 @@ WordPress / PHP / MySQL versions, active theme + version, all plugins
 and updates pending. WordPress APIs: `home_url()`, `get_bloginfo()`,
 `phpversion()`, `$wpdb->db_version()`, `wp_get_theme()`,
 `get_plugins()`, `get_mu_plugins()`, `wp_get_update_data()`.
-Keep the last inventory snapshot in a WordPress option and diff it on each
-run. Report version moves and plugins added or removed. Content-edit
+Keep two inventory snapshots in separate WordPress options: a daily
+snapshot and a monthly snapshot. The daily report diffs against the daily
+snapshot and then replaces it; the monthly report diffs against the monthly
+snapshot and then replaces it. The daily run must never overwrite the
+monthly snapshot, so the monthly report shows changes from the prior month,
+not the prior day. If a snapshot does not exist yet, say so in the report
+and save the baseline. Report version moves and plugins added or removed. Content-edit
 tracking is out of scope.
 
 **Chunk 2 — backup status.** Collect WPvivid version, schedule (enabled,

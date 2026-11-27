@@ -46,8 +46,10 @@
 - Resolved: after removing the port-conflicting application and restarting
   Windows, the root Compose stack is running on port 8080. HTTP returned 200
   with the WordPress installation screen; this is a fresh local setup, not
-  yet the restored test-site backup.
-- Obtain a current test-site backup and place the working copy in
+  yet a restored dev-site backup.
+- Obtain a current WPvivid migration backup of `dev.shoalsaa.org` (the single
+  backup source for local restores; test.shoalsaa.org was retired on
+  27 November 2026) and place the working copy in
   `local-backups/wpvivid/` at the repository root. This directory is
   Git-ignored; do not add, commit, or push any backup archive or its contents.
 - Restore the backup only into the local Docker site, then test the restored
