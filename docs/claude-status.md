@@ -256,7 +256,35 @@ The manual `composer require` line is gone from docker/README.md. Also:
 `composer.json` declares the MIT license, and `.gitignore` ignores the
 PHPUnit result cache.
 
-Items 15–20 (Docker docs and cleanup) are still open.
+Update 2026-11-27 (later): item 14 merged in PR #7. Rob verified the
+WordPress time zone is America/Chicago on dev and live.
+
+Update 2026-11-27 (later): items 15–20 are done on branch
+`docs/docker-cleanup`:
+
+- Item 15: one start command, `docker compose up -d --build`, in
+  docker/README.md, readme-Docker.md, the compose header, ci.yml, the build
+  brief and the root README. docker/README.md now describes the automatic
+  install (`districtone`, site title "ShoalsAA Local Test") instead of an
+  install screen.
+- Item 16: Mailpit pinned to v1.34.0 (the version already running). PHP
+  pinned to `php:8.4.27-apache` to match the live site; the local container
+  had drifted to 8.4.28 on the floating tag and returns to 8.4.27 on the
+  next rebuild. Tags checked on Docker Hub.
+- Item 17: readme-Docker.md is now a how-to (files, start, managing
+  backups, restore, safety). Its conversation record moved, condensed, to
+  the end of project-history.md, with the host-OS sentence corrected (the
+  local host is Windows). The phpMyAdmin note was already in the history.
+  docker/README.md's old-volume note now names both earlier volumes.
+- Item 18: docs/README.md is an index of the docs folder.
+- Item 19: prompt-chunking.md is plain guidance (chunks as a workflow aid,
+  prompt budget, file layout matching the brief's chunks, includes and
+  human-only blocks); the transcript and PDF chunk name are gone.
+- Item 20: the performance notes are labelled live-site operations notes
+  (outside the plugin's scope), and the DreamPress advice is replaced with
+  a DreamHost shared hosting and Cloudflare note.
+
+All 20 recommendations are now done.
 
 **Fix now (they affect correctness or safety)**
 

@@ -189,7 +189,7 @@ email delivery, and both email formats.
 
 ## Test it
 
-**Stage 1 — local Docker:** run `docker compose up -d` from the repo root,
+**Stage 1 — local Docker:** run `docker compose up -d --build` from the repo root,
 open <http://localhost:8080>, activate the plugin, trigger both reports,
 verify scheduling and Mailpit delivery, report structure, warnings, and
 unavailable-data behavior. Do not treat local data as production data.

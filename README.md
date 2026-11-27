@@ -24,9 +24,10 @@ live site until it has been tested and approved.
 - `local-model/build-brief.md` — the brief for building the plugin with a
   local model; `local-model/prompt-chunking.md` covers how to feed it in parts.
 - `docker-compose.yml` + `docker/` — authoritative local WordPress test
-  environment (WordPress 7.1.5, PHP 8.4, MySQL 8.4.11, Mailpit), including its
-  ports and test-only database configuration. See `docker/README.md` for test
-  instructions and `readme-Docker.md` for the setup notes.
+  environment (WordPress 7.1.5, PHP 8.4.27, MySQL 8.4.11, Mailpit v1.34.0),
+  including its ports and test-only database configuration. Start it with
+  `docker compose up -d --build`. See `docker/README.md` for plugin testing
+  and `readme-Docker.md` for running, managing and restoring the local site.
 - `tests/` — PHPUnit + Brain Monkey unit tests (run `composer install`, then
   `vendor/bin/phpunit`) and the staged integration test guidance.
 - `.github/workflows/ci.yml` — CI: PHP lint, WordPress Coding Standards

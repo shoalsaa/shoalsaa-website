@@ -2,11 +2,11 @@
 
 A throwaway copy of WordPress on your own machine for basic integration
 testing of the site-report plugin before it is deployed to dev.shoalsaa.org,
-without touching dev or the live site. The compose file pins WordPress 7.1.5
-and MySQL 8.4.11 and selects the PHP 8.4 Apache image. Check the running PHP
-patch with `docker compose exec wordpress php -v` before serious testing. The
-MySQL image matches upstream 8.4.11; its Ubuntu package build suffix on the
-live site is distribution-specific.
+without touching dev or the live site. The stack pins WordPress 7.1.5,
+PHP 8.4.27 (matching the live site; set in `docker/Dockerfile`), MySQL
+8.4.11 and Mailpit v1.34.0. When the live site's PHP or MySQL version moves,
+update the pins to match. The MySQL image matches upstream 8.4.11; its
+Ubuntu package build suffix on the live site is distribution-specific.
 
 The root `docker-compose.yml` is the authoritative source for the local
 services, ports, database configuration, and test-only credentials. Keep
@@ -23,11 +23,20 @@ Setup notes and the WPvivid restore procedure are in `readme-Docker.md`.
 From the repo root, in PowerShell:
 
 ```powershell
-docker compose up -d
+docker compose up -d --build
 ```
 
-Then open http://localhost:8080 and finish the WordPress install (site title,
-admin user and password are test-only — choose values for this local install).
+`--build` builds the local WordPress image the first time and rebuilds it
+only when `docker/` changes. To also refresh the base images, run
+`docker compose build --pull` first. Check that all three services are
+running with `docker compose ps`.
+
+On first start with an empty database, WordPress installs itself: site
+title "ShoalsAA Local Test" and administrator `districtone`, with the
+local-only password set in `docker-compose.yml`. There is no install screen.
+Open <http://localhost:8080/wp-admin> and sign in. These credentials are for
+this local stack only; the bootstrap never changes an already-installed
+site, so a restored backup keeps its own users and passwords.
 
 Install Post SMTP in the local WordPress site and configure its SMTP host as
 `mailpit`, port `1025`, with no authentication or encryption. This uses the
@@ -35,8 +44,10 @@ internal Docker service and avoids the real SMTP relay. Configure this before
 testing email; the Mailpit container by itself does not redirect WordPress
 mail. Open http://localhost:8025 to view captured messages.
 
-The database uses a fresh `mysql_data` volume. Any older MariaDB volume is
-left untouched.
+The database uses the `mysql_data` volume. Volumes from earlier Compose
+versions (an early MariaDB volume, and `shoalsaa-website_db_data` from a
+`mysql:8.4` revision) are not used and are left untouched; check what they
+hold before deleting them (`docker volume ls`).
 
 ## Test the plugin
 

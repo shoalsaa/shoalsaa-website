@@ -15,14 +15,13 @@
 - Confirm that the exact same WPvivid Backup Schedule fields appear in both
   reports. Test failed-last-backup notification and disabled-schedule
   WARNING behavior in the daily and monthly email bodies.
-- Confirm the WordPress time zone (Settings → General) is America/Chicago on
-  dev and live, as the design now assumes.
 - Decide whether WP-Cron's approximate timing is sufficient or whether a
   hosting/server cron is needed for the 08:00 daily and 07:00 last-Sunday
   monthly schedule.
 - Resolved 27 November 2026: "read-only" is defined in design §7 (the
   plugin writes only its own options and WP-Cron events), the design doc is
-  the spec, and monthly usage covers an exact reporting period.
+  the spec, and monthly usage covers an exact reporting period. The
+  WordPress time zone is verified as America/Chicago on dev and live.
 
 ## Continue local Docker testing
 
