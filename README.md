@@ -23,6 +23,9 @@ Maintained by the District 1 Web-Committee Chair (webservant@shoalsaa.org).
   local model (Ollama). The human reviews everything before upload.
 - `.github/workflows/ci.yml` — CI: PHP lint, unit tests, and a boot check
   of the Docker stack on every push and pull request.
+- `.github/workflows/deploy.yml` + `docs/deploy.md` — deploys the plugin to
+  DreamHost over SSH: dev automatically after CI passes on `main`, live only
+  by hand with approval. See `docs/deploy.md` for the one-time setup.
 
 ## Documents that do NOT live here (yet)
 

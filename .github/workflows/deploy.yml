@@ -1,0 +1,79 @@
+# Deploys site-report-plugin/ to DreamHost over SSH (rsync).
+#   dev:  automatically, after CI succeeds on main.
+#   live: only by hand (Actions > Deploy plugin > Run workflow > live),
+#         gated by the "live" environment's required reviewer.
+# Copies files only; activating the plugin stays a manual step in WP Admin.
+# Setup (secrets, DreamHost SSH user, environments): docs/deploy.md
+name: Deploy plugin
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Site to deploy to
+        type: choice
+        options: [dev, live]
+        default: dev
+
+concurrency: deploy-${{ inputs.target || 'dev' }}
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.target || 'dev' }}
+    env:
+      DH_SSH_HOST: ${{ secrets.DH_SSH_HOST }}
+      DH_SSH_USER: ${{ secrets.DH_SSH_USER }}
+      DH_SITE_PATH: ${{ vars.DH_SITE_PATH }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Skip until the plugin exists
+        id: guard
+        run: |
+          if ls site-report-plugin/*.php >/dev/null 2>&1; then
+            echo "go=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No plugin PHP files yet; nothing to deploy."
+          fi
+
+      - name: Check settings
+        if: steps.guard.outputs.go
+        run: |
+          for v in DH_SSH_HOST DH_SSH_USER DH_SITE_PATH; do
+            [ -n "${!v}" ] || { echo "::error::$v is not set for this environment (see docs/deploy.md)"; exit 1; }
+          done
+
+      - name: Set up SSH
+        if: steps.guard.outputs.go
+        env:
+          KEY: ${{ secrets.DH_SSH_KEY }}
+          KNOWN: ${{ secrets.DH_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
+
+      - name: Copy plugin to DreamHost
+        if: steps.guard.outputs.go
+        run: |
+          rsync -az --delete --exclude README.md \
+            site-report-plugin/ \
+            "$DH_SSH_USER@$DH_SSH_HOST:$DH_SITE_PATH/wp-content/plugins/shoalsaa-site-report/"
+
+      - name: Confirm WordPress sees it (read-only)
+        if: steps.guard.outputs.go
+        run: |
+          ssh "$DH_SSH_USER@$DH_SSH_HOST" \
+            "wp --path='$DH_SITE_PATH' plugin get shoalsaa-site-report --fields=name,status,version"
