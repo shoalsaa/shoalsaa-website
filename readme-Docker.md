@@ -176,7 +176,7 @@ Envelope-From Email Address: <webservant@shoalsaa.org>.
 7. Use WPvivid's URL replacement feature, or a serialization-aware WordPress search/replace tool, to replace production URLs with `http://localhost:8080`. Update `home` and `siteurl` to that URL as well. Avoid raw SQL string replacement because serialized values can be corrupted.
 8. Clear caches and test the homepage, admin login, media, plugin pages, permalinks, and email delivery.
 
-The Compose `WP_HOME` and `WP_SITEURL` settings force WordPress to use the local URL even if the restored database initially contains production URLs. Replacing production URLs in the database is still useful for links embedded in content and plugin settings. DO NOT restore backups of the Docker image to the online test site <https://test.shoalsaa.org> or the live site <https://www.shoalaa.org>
+The Compose `WP_HOME` and `WP_SITEURL` settings force WordPress to use the local URL even if the restored database initially contains production URLs. Replacing production URLs in the database is still useful for links embedded in content and plugin settings. DO NOT restore backups of the Docker image to the online test site <https://dev.shoalsaa.org> or the live site <https://www.shoalaa.org>
 
 ## Safety notes
 

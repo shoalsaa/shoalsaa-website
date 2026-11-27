@@ -1,1 +1,0 @@
-{"description":"Code and documents for the AA District 1 website, shoalsaa.org","name":"shoalsaa/shoalsaa-website","require-dev":{"brain/monkey":"^2.0","phpunit/phpunit":"^11.0"},"scripts":{"test":"vendor/bin/phpunit"}}
