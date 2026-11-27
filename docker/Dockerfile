@@ -1,8 +1,8 @@
 # Use the official WordPress image only as a source for the pinned WordPress core.
 FROM wordpress:7.1.5-php8.3-apache AS wordpress_source
 
-# Run the requested PHP 8.4 Apache runtime independently of the host OS.
-FROM php:8.4-apache
+# PHP runtime pinned to the live site's patch version (8.4.27); update it when the live site's PHP changes.
+FROM php:8.4.27-apache
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \

@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Start the local WordPress test stack
-        run: docker compose up -d
+        run: docker compose up -d --build
       - name: Wait for WordPress
         run: |
           wordpress_port="$(docker compose port wordpress 80 | sed -E 's/.*:([0-9]+)$/\1/')"

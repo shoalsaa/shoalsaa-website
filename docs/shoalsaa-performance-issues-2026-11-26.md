@@ -1,5 +1,10 @@
-
 # Shoalsaa performance issues 2026-11-26
+
+> **Live-site operations notes.** These notes are about the live
+> shoalsaa.org site, not the site-report plugin, and are outside the
+> plugin project's scope. They are kept here for reference. The district
+> sites run on DreamHost shared hosting (Apache) behind Cloudflare, not
+> DreamPress.
 
 The “Issues were logged in the Issues panel in Chrome DevTools” Lighthouse audit is a diagnostic flag, not a measurement of page speed. It means Chrome detected one or more browser-level problems while loading or using the page and recorded them in DevTools > Issues.
 
@@ -53,7 +58,7 @@ Re-test the page and confirm all requested resources load over HTTPS.
 
 DreamHost describes mixed content as images, scripts, or stylesheets loading through the old insecure HTTP protocol, including cases involving embedded videos. DreamHost also explains that HTTP links on a site with SSL can trigger a mixed-content warning.
 
-For a non-DreamPress WordPress site, DreamHost documents an .htaccess HTTPS redirect option. Do not add this on DreamPress: DreamPress uses Nginx and “automatically forces HTTPS.”
+On DreamHost shared hosting, DreamHost documents an .htaccess HTTPS redirect option. Because the sites are behind Cloudflare, HTTPS may already be forced there (Cloudflare's "Always Use HTTPS" setting); check both before adding a redirect, so the site does not get two redirects or a redirect loop.
 
 Failed or blocked JavaScript, fonts, stylesheets, images, or API calls
 

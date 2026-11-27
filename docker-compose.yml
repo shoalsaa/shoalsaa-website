@@ -1,7 +1,6 @@
 # Local WordPress test site for the ShoalsAA site-report plugin.
 # Test-only credentials; do not use this stack with production data or passwords.
-# Build the local WordPress image first: docker compose build wordpress
-# Start the built image: docker compose up -d --no-build
+# Start (builds the WordPress image when needed): docker compose up -d --build
 # WordPress: http://localhost:8080 | Mailpit UI: http://localhost:8025
 services:
   db:
@@ -47,7 +46,7 @@ services:
       - ./site-report-plugin:/var/www/html/wp-content/plugins/shoalsaa-site-report
 
   mailpit:
-    image: axllent/mailpit:latest
+    image: axllent/mailpit:v1.34.0
     restart: unless-stopped
     ports:
       - "8025:8025"
