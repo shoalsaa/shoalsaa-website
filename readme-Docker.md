@@ -188,10 +188,10 @@ docker cp .\local-backups\wpvivid\backup.zip shoalsaa-website-wordpress-1:/var/w
 
 ## Restoring a WPvivid backup
 
-1. Take a fresh, complete WPvivid backup containing the database and site files. Use a local test copy, not the live site's database or uploads.
+1. The backup source is the dev site, <https://dev.shoalsaa.org> (test.shoalsaa.org was retired on 27 November 2026). Do not back up the live site's database or uploads for local use.
 2. Start the stack and install WPvivid in the local WordPress instance if the import workflow requires it.
 3. Fill in the General Settings on the dash board, especially the Site Title (shoalsaa docker test),  time-zone (Chicago), and Week Starts On (Sunday).
-4. Create a migration backup from the live site following the procedure here: <https://docs.wpvivid.com/auto-migration.html>
+4. Create a fresh, complete migration backup (database and site files) on dev.shoalsaa.org following the procedure here: <https://docs.wpvivid.com/auto-migration.html>
 5. Import and restore the backup. Verify the restored plugin files exist under `wp-content/plugins` and the plugin settings are present in the restored database. disable auto-update for all plugins and for wordpress - or install the Disable Updates – Updates Manager, Disable Automatic Updates, Disable All Updates plugin (long name hard to find. Shows up as Updates Manager after installation. activate it and set updates to manual for all wordpress and plugins)
 6. Point SMTP at Mailpit before testing email, so test messages are captured locally.Settings: Transport: Other SMTP
 Mailer Type: PostSMTP, Outgoing Mail Server Hostname: mailpit, Outgoing Mail Server Port: 1025,
@@ -199,7 +199,7 @@ Envelope-From Email Address: <webservant@shoalsaa.org>.
 7. Use WPvivid's URL replacement feature, or a serialization-aware WordPress search/replace tool, to replace production URLs with `http://localhost:8080`. Update `home` and `siteurl` to that URL as well. Avoid raw SQL string replacement because serialized values can be corrupted.
 8. Clear caches and test the homepage, admin login, media, plugin pages, permalinks, and email delivery.
 
-The Compose `WP_HOME` and `WP_SITEURL` settings force WordPress to use the local URL even if the restored database initially contains production URLs. Replacing production URLs in the database is still useful for links embedded in content and plugin settings. DO NOT restore backups of the Docker image to the online test site <https://dev.shoalsaa.org> or the live site <https://www.shoalaa.org>
+The Compose `WP_HOME` and `WP_SITEURL` settings force WordPress to use the local URL even if the restored database initially contains production URLs. Replacing production URLs in the database is still useful for links embedded in content and plugin settings. DO NOT restore backups of the Docker image to the online test site <https://dev.shoalsaa.org> or the live site <https://www.shoalsaa.org>
 
 ## Safety notes
 
