@@ -1,3 +1,4 @@
+
 # Build Brief Comparison
 
 Compared these files by content using a unified diff:

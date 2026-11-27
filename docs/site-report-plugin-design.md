@@ -7,8 +7,8 @@ District 1, Area 1 AA — shoalsaa.org
 15 November 2026 — Prepared for Rob, District 1 Web-Committee Chair
 20 November 2026 -- revised, eliminate phasing, implement as totally contained in the plugin,no inbound endpoints exposed to the outside world.
 27 November 2026 -- test target changed to <https://dev.shoalsaa.org> (replacing test.shoalsaa.org); plugin files reach it through the automated deploy in `docs/deploy.md`.
-
-Status: first pass, for review. This is a design, not a build specification.
+27 November 2026 -- no phase 2 plan, just a plugin for the website to generate 2 reports and email them on a schedule to <wevservant@shoalsaa.org>
+Status: 2nd pass, for review. This is a design, not a build specification.
 
 ## 1. Purpose
 
@@ -145,7 +145,7 @@ All checked 15 November 2026 unless dated otherwise. Nothing here is assumed.
 
 - This document: `docs/site-report-plugin-design.md` in <https://github.com/shoalsaa/shoalsaa-website>.
 
-- Test site: <https://dev.shoalsaa.org> (DreamHost-migrated copy of www.shoalsaa.org, behind Cloudflare). Deploys: `.github/workflows/deploy.yml`, setup in `docs/deploy.md`.
+- Test site: <https://dev.shoalsaa.org> (DreamHost-migrated copy of <www.shoalsaa.org>, behind Cloudflare). Deploys: `.github/workflows/deploy.yml`, setup in `docs/deploy.md`.
 
 - Former test site: <https://test.shoalsaa.org>, replaced by dev on 27 November 2026.
 
