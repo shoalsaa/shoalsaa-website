@@ -1,10 +1,10 @@
 # Local WordPress test site for the ShoalsAA site-report plugin.
-# Test-only credentials below — this stack never touches the live site.
-# Run from the repo root:  docker compose up -d
-# Then open http://localhost:8080 and finish the WordPress install.
+# Test-only credentials; do not use this stack with production data or passwords.
+# Run from the repository root: docker compose up --pull always -d
+# WordPress: http://localhost:8080 | Mailpit UI: http://localhost:8025
 services:
   db:
-    image: mysql:8.4
+    image: mysql:8.4.11
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: wordpress
@@ -12,22 +12,43 @@ services:
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
     volumes:
-      - db_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pwordpress"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   wordpress:
-    image: wordpress:7.1.4-php8.4-apache
+    image: shoalsaa-wordpress:7.1.5-php8.4
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
     restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "8080:80"
     environment:
-      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_HOME: http://localhost:8080
+      WORDPRESS_SITEURL: http://localhost:8080
     volumes:
+      - wordpress_data:/var/www/html
       - ./site-report-plugin:/var/www/html/wp-content/plugins/shoalsaa-site-report
 
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "8025:8025"
+    expose:
+      - "1025"
+
 volumes:
-  db_data:
+  mysql_data:
+  wordpress_data:

@@ -1,45 +1,54 @@
+# Local WordPress test site for the ShoalsAA site-report plugin.
+# Test-only credentials; do not use this stack with production data or passwords.
+# Run from the repository root: docker compose up --pull always -d
+# WordPress: http://localhost:8080 | Mailpit UI: http://localhost:8025
 services:
   db:
-    image: mariadb:11.4
+    image: mysql:8.4.11
     restart: unless-stopped
     environment:
-      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-localroot}
-      MARIADB_DATABASE: ${DB_NAME:-wordpress}
-      MARIADB_USER: ${DB_USER:-wordpress}
-      MARIADB_PASSWORD: ${DB_PASSWORD:-wordpress}
-    volumes: [db_data:/var/lib/mysql]
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    volumes:
+      - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
-      interval: 10s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pwordpress"]
+      interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 20
+
   wordpress:
-    image: wordpress:php8.4-apache
+    image: shoalsaa-wordpress:7.1.5-php8.4
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
     restart: unless-stopped
     depends_on:
-      db: {condition: service_healthy}
-    ports: ["8082:80"]
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:80"
     environment:
       WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_NAME: ${DB_NAME:-wordpress}
-      WORDPRESS_DB_USER: ${DB_USER:-wordpress}
-      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:-wordpress}
-      WORDPRESS_DEBUG: "1"
-      WORDPRESS_CONFIG_EXTRA: |
-        define('WP_DEBUG_LOG', true);
-        define('WP_DEBUG_DISPLAY', false);
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_HOME: http://localhost:8080
+      WORDPRESS_SITEURL: http://localhost:8080
     volumes:
-      - wp_data:/var/www/html
-      - ./:/var/www/html/wp-content/plugins/mec-version-monitor
-      - ./docker/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
-  phpmyadmin:
-    image: phpmyadmin:5
-    restart: unless-stopped
-    depends_on: [db]
-    ports: ["8081:80"]
-    environment: {PMA_HOST: db, UPLOAD_LIMIT: 64M}
+      - wordpress_data:/var/www/html
+      - ./site-report-plugin:/var/www/html/wp-content/plugins/shoalsaa-site-report
+
   mailpit:
     image: axllent/mailpit:latest
     restart: unless-stopped
-    ports: ["8025:8025", "1025:1025"]
-volumes: {db_data: {}, wp_data: {}}
+    ports:
+      - "8025:8025"
+    expose:
+      - "1025"
+
+volumes:
+  mysql_data:
+  wordpress_data:

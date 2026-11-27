@@ -1,8 +1,15 @@
 # Local test site (Docker)
 
-A throwaway copy of WordPress on your own machine, matching the live site's
-versions (WordPress 7.1.4, PHP 8.4, PHP 8.4.27; MySQL 8.4.11-0ubuntu0.26.04.1), for testing the site-report
-plugin without touching test.shoalsaa.org or the live site.
+A throwaway copy of WordPress on your own machine for testing the site-report
+plugin without touching test.shoalsaa.org or the live site. The compose file
+pins WordPress 7.1.5 and MySQL 8.4.11 and selects the PHP 8.4 Apache image.
+Check the running PHP patch with `docker compose exec wordpress php -v` before
+serious testing. The MySQL image matches upstream 8.4.11; its Ubuntu package
+build suffix on the live site is distribution-specific.
+
+The root `docker-compose.yml` is the authoritative source for the local
+services, ports, database configuration, and test-only credentials. Keep
+environment values there rather than maintaining separate copies in docs.
 
 ## Prerequsites
 
@@ -17,17 +24,24 @@ From the repo root, in PowerShell:
 docker compose up -d
 ```
 
-Then open the localhost port for the wordpress container and finish the WordPress install (site title,
-admin user and password are all test-only — anything you like).
+Then open http://localhost:8080 and finish the WordPress install (site title,
+admin user and password are test-only — choose values for this local install).
+
+Install Post SMTP in the local WordPress site and configure its SMTP host as
+`mailpit`, port `1025`, with no authentication or encryption. This uses the
+internal Docker service and avoids the real SMTP relay. Configure this before
+testing email; the Mailpit container by itself does not redirect WordPress
+mail. Open http://localhost:8025 to view captured messages.
+
+The database uses a fresh `mysql_data` volume. Any older MariaDB volume is
+left untouched.
 
 ## Test the plugin
 
 1. Put the plugin code in `site-report-plugin/` (it is mounted into the
    container at `wp-content/plugins/shoalsaa-site-report`).
 2. In the local WP Admin: Plugins > ShoalsAA Site Report > Activate.
-3. Install the MCP Adapter plugin (0.7.1) from Plugins > Add New if you want
-   to test the MCP endpoint.
-4. Create a test Application Password (Users > Profile) and call a REST
+3. Create a test Application Password (Users > Profile) and call a REST
    route, for example in PowerShell:
 
 ```powershell
@@ -39,9 +53,8 @@ application password when you are done.
 
 ## Notes
 
-- Initially this is a bare WordPress install: no site content, no Burst or WPvivid
-  data.  Later we will add the WPvivid plugin, and import a backub: from <https://test.shoalsaa.org>
-- Add New inside the container first.
+- This is a bare WordPress install: no site content, Burst, or WPvivid data.
+  Install plugins through Plugins > Add New inside the container as needed.
 - Stop with `docker compose down`. Add `-v` to wipe the database and start
   completely fresh: `docker compose down -v`. ASK for permission before doing this
 - Nothing here talks to shoalsaa.org, test.shoalsaa.org, or DreamHost directly.

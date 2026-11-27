@@ -1,27 +1,22 @@
-# ShoalsAA Website
+# ShoalsAA Site Report Plugin
 
-Code and documents for the AA District 1 (Area 1) website, shoalsaa.org.
-Maintained by the District 1 Web-Committee Chair (webservant@shoalsaa.org).
+This project is for a WordPress plugin that runs the site's reporting workflow
+and email delivery itself:
 
-## What lives here
+- Send a self-contained daily email with the site's status and inventory.
+- Generate and email a monthly status summary, including usage statistics.
 
-- `docs/site-report-plugin-design.md` — design for the read-only site-report
-  plugin that will feed the daily inventory email and the monthly status
-  report (first pass, 15 November 2026). The plugin itself is not built yet.
-- `docs/website-succession-plan.md` — succession plan for the website and the
-  secrets that run it (first-pass draft, November 2026).
-- `site-report-plugin/` — the plugin source, once it is built. Test-site first;
-  nothing goes on the live site until the webservant has tested it there.
+The plugin is not built yet. Development and testing happen in the local
+WordPress environment first; nothing goes to the live site until it has been
+tested and approved.
 
-## Documents that do NOT live here (yet)
+## Project files
 
-The website manual (v3.3, Word, with screenshots) stays in Word for now;
-versioned copies live on the webservant's OneDrive. The password-manager
-comparison is a PDF. If either is converted to Markdown, it moves here.
+- `site-report-plugin/` — plugin source as it is built.
+- `docker-compose.yml` — authoritative local WordPress test environment,
+  including its ports and test-only database configuration. See
+  `docker/README.md` for test instructions.
+- `tests/` — PHPUnit unit tests and test guidance.
 
-## Ownership and succession
-
-This repository lives in the District 1 GitHub organization (`shoalsaa`), not
-in any one person's account, so it moves with the office. The organization
-should always have at least two owners, so the code and documents are never
-stranded with a single account.
+The current scope is the plugin's self-contained daily and monthly email
+reports.

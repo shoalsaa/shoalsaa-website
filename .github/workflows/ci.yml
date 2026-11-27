@@ -31,10 +31,12 @@ jobs:
         run: docker compose up -d
       - name: Wait for WordPress
         run: |
+          wordpress_port="$(docker compose port wordpress 80 | sed -E 's/.*:([0-9]+)$/\1/')"
+          wordpress_url="http://localhost:${wordpress_port}"
           for i in $(seq 1 30); do
-            curl --fail --silent http://localhost:8080/ >/dev/null && break
+            curl --fail --silent "${wordpress_url}/" >/dev/null && break
             sleep 10
           done
-          curl --fail --silent http://localhost:8080/ >/dev/null
+          curl --fail --silent "${wordpress_url}/" >/dev/null
       # The endpoint smoke test (REST routes, PDF generation) lands with the
       # plugin code; see tests/README.md.

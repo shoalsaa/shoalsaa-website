@@ -14,7 +14,7 @@ Note: make the email destination is configurable, with <webservant@shoalsaa.org>
 ## Build
 
 A WordPress plugin in `site-report-plugin/`, slug `shoalsaa-site-report`,
-version 0.1.0, for WordPress 7.1.4 / PHP 8.4.27:
+version 0.1.0, for WordPress 7.1.5 / PHP 8.4.27:
 
 1. Four JSON data abilities (WordPress Abilities API, each flagged public
    so the MCP Adapter exposes them): `shoalsaa-report/get-inventory`,
@@ -62,9 +62,12 @@ version 0.1.0, for WordPress 7.1.4 / PHP 8.4.27:
   (`docker/README.md`)
  test.shoalsaa.org. ( 'Online-Test/Build_Online.md')
 
-
 ## Test it
 
-`docker compose up -d` from the repo root, open localhost:Wordpress-docker-container-port,
+`docker compose up -d` from the repo root, open <http://localhost:8080>,
 activate the plugin, call each REST route with a test Application
 Password, and compare every figure against the WP Admin screens.
+Use `docker-compose.yml` as the source of truth for local test environment
+values; do not duplicate or assume its database credentials elsewhere.
+Configure local Post SMTP to use the `mailpit` service on port `1025` before
+testing email; inspect captured messages at <http://localhost:8025>.

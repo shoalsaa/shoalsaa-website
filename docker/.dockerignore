@@ -1,0 +1,5 @@
+*
+!Dockerfile
+!php.ini
+!wp-config.php
+!wordpress-entrypoint.sh
