@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+  WordPress Coding Standards check for the site-report plugin.
+  Run: composer lint    (fix what can be fixed automatically: composer lint:fix)
+  Standards: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/
+-->
+<ruleset name="ShoalsAA Site Report">
+    <description>WordPress Coding Standards for the ShoalsAA site-report plugin.</description>
+
+    <!-- Only the plugin is checked; docs, tests and Docker files are not plugin code. -->
+    <file>site-report-plugin</file>
+    <arg name="extensions" value="php"/>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+
+    <arg name="colors"/>
+    <arg value="sp"/>
+    <arg name="parallel" value="8"/>
+
+    <rule ref="WordPress"/>
+
+    <config name="minimum_wp_version" value="7.1"/>
+
+    <!-- All translatable strings use the plugin's slug as the text domain. -->
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="shoalsaa-site-report"/>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- Global functions, classes, constants, options and hooks carry the plugin prefix. -->
+    <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+        <properties>
+            <property name="prefixes" type="array">
+                <element value="shoalsaa_site_report"/>
+                <element value="ShoalsAA_Site_Report"/>
+                <element value="SHOALSAA_SITE_REPORT"/>
+            </property>
+        </properties>
+    </rule>
+</ruleset>

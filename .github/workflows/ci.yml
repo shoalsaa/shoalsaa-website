@@ -20,6 +20,8 @@ jobs:
           echo "Lint done."
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
+      - name: Check WordPress Coding Standards
+        run: vendor/bin/phpcs --no-colors
       - name: Run unit tests
         run: vendor/bin/phpunit
 
