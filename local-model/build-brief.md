@@ -60,7 +60,7 @@ version 0.1.0, for WordPress 7.1.4 / PHP 8.4.27:
   sources (with links), every item still needing live verification, and a
   step-by-step install + test checklist for the local Docker stack
   (`docker/README.md`)
- test.shoalsaa.org. ( 'Online-Test/Build_Online.md')
+ dev.shoalsaa.org. ( 'Online-Test/Build_Online.md')
 
 
 ## Test it
