@@ -8,23 +8,34 @@ District 1, Area 1 AA — shoalsaa.org
 20 November 2026 -- revised, eliminate phasing, implement as totally contained in the plugin,no inbound endpoints exposed to the outside world.
 27 November 2026 -- test target changed to <https://dev.shoalsaa.org> (replacing test.shoalsaa.org); plugin files reach it through the automated deploy in `docs/deploy.md`.
 27 November 2026 -- no phase 2 plan, just a plugin for the website to generate 2 reports and email them on a schedule to <webservant@shoalsaa.org>
-Status: 2nd pass, for review. This is a design, not a build specification.
+27 November 2026 -- this document is now the build specification; monthly usage covers an exact reporting period; schedule times use the site time zone; "read-only" defined (§7); approvals belong to the webservant office; §2 Scope added.
+Status: build specification. `local-model/build-brief.md` turns it into build steps; where the two differ, this document wins.
 
 ## 1. Purpose
 
 **Daily inventory email.** runs daily at 08:00 and emails a short factual inventory to <webservant@shoalsaa.org> — WordPress / PHP / MySQL / theme / plugin versions, what changed since the previous day, updates pending, and the WPvivid backup schedule status. The same backup status is included in the monthly report. A failed last backup prompts immediate attention; a disabled backup schedule is a warning in both reports. No manual updates and no WPvivid archive or restore verification.
 
-**Monthly status report.** Fires every Sunday at 07:00 and runs only on the last Sunday of the month (first real run: Sunday 29 November 2026). A brief plain-text email to <webservant@shoalsaa.org> contains Cloudflare and Burst usage for the period ending that morning, changes and updates from the prior month, current versions, and the same WPvivid backup schedule status included in the daily report.
+**Monthly status report.** Fires every Sunday at 07:00 and runs only on the last Sunday of the month (first real run: Sunday 29 November 2026). A brief plain-text email to <webservant@shoalsaa.org> contains Cloudflare and Burst usage for the reporting period, changes and updates from the prior month, current versions, and the same WPvivid backup schedule status included in the daily report.
 
-- The reports do not need to be exact to the minute or visit. Rolling-month widget figures are acceptable, with the period they cover stated in the report.
+- **Reporting period.** Monthly Cloudflare and Burst figures cover an exact period: from the previous monthly report's run up to the morning of this run (for the first run, from 00:00 on the first day of that month). The report states the start and end dates. Figures need not be exact to the minute or visit. If a source can only return a rolling window, the report gives that window's dates and says plainly that it is not the exact period.
+
+- **Time zone.** All schedule times (08:00 daily, 07:00 Sunday) and report dates use the site's WordPress time zone (Settings → General), America/Chicago on the district sites.
 
 - Every report states the origin site's own URL at the top, so the recipient can tell which site sent it — live: <https://www.shoalsaa.org>; test: <https://dev.shoalsaa.org>. The URL is that of the site the report was generated from, never a hardcoded live-site URL.
 
-- Reports go to <webservant@shoalsaa.org>, the district webservant mailbox, which is meant to move with the office when it changes hands — not to Rob's personal email.
+- Reports go to <webservant@shoalsaa.org>, the district webservant mailbox, which is meant to move with the office when it changes hands — not to any individual's personal email.
 
-- Changes to site pages are not in the report scope.
+## 2. Scope
 
-- The monthly report is plain email text, like the daily report. No attachment or PDF library is needed.
+In scope: one self-contained WordPress plugin that collects the data in §4, builds the daily and monthly plain-text emails, and sends them on its own WP-Cron schedule.
+
+Out of scope:
+
+- Changes to site pages or other content edits.
+- PDF, Word, or other attachments. The monthly report is plain email text, like the daily report; no attachment or PDF library is needed.
+- Inbound endpoints of any kind: no REST routes, WordPress Abilities, or MCP Adapter integration. If external reporting is revisited, it is a separate design.
+- Installing, updating, activating, or configuring anything on the site (see "Read-only" in §7).
+- Verifying or restoring WPvivid backup archives.
 
 ## 3. Architecture at a glance
 
@@ -58,9 +69,11 @@ Every item below is data the reports are expected to contain is read from inside
 
 - WordPress has no built-in monthly interval. The plugin registers a custom interval and checks for the last Sunday itself.
 
+- Schedule times are in the site's WordPress time zone (§1), not UTC. Schedule events from local times, so the 08:00 and 07:00 runs do not shift by an hour when daylight saving time starts or ends.
+
 - Provide buttons on the plugin admin page for triggering each report, will need these during development and testing.
 
-## 6. Email and documents
+## 6. Email content
 
 - Every report states the origin site's own URL at the top — the URL of the site the report was generated from, not always the live site — so the recipient can tell whether it is a test-site report or a live report (decided 15 November 2026).
 
@@ -68,19 +81,19 @@ Every item below is data the reports are expected to contain is read from inside
 
 ## 7. Security and succession
 
-- Read-only by design. The plugin cannot change the site, and it contains no write operations to be misused.
+- Read-only by design. The plugin never changes site content, settings, users, themes, or other plugins, and never installs, updates, or activates anything. Its only writes are to its own data: its WordPress options (the daily and monthly inventory snapshots, its version, and its settings such as the recipient address) and its own WP-Cron events.
 
 - No secrets in code. The plugin ships with no passwords, keys, or tokens.
 
-- Test-site first. All development and testing on the local Docker site, then dev.shoalsaa.org. Plugin files reach dev only through the automated deploy (`docs/deploy.md`) after CI passes. Nothing is installed on the live site until Rob has tested it there himself.
+- Local Docker first, then dev. All development and testing happens on the local Docker site, then dev.shoalsaa.org. Plugin files reach dev only through the automated deploy (`docs/deploy.md`) after CI passes. Nothing is installed on the live site until the webservant has tested it on dev and approved it.
 
 - Code storage. The plugin source is district property. Its canonical home is the District 1 GitHub repository <https://github.com/shoalsaa/shoalsaa-website>.
 
 ## 8. Testing plan
 
 Testing proceeds in two stages. Complete and pass Stage 1 before installing
-the plugin on `dev.shoalsaa.org`. The live site is not touched unless Rob
-later explicitly approves it.
+the plugin on `dev.shoalsaa.org`. The live site is not touched unless the
+webservant later explicitly approves it.
 
 Branching and merge: every green CI run on `main` deploys the plugin to dev,
 and CI does not run Stage 1. Develop on a branch, run Stage 1 from that
@@ -125,8 +138,8 @@ the live site.
    and the monthly reporting period. Confirm missing or unreachable data
    is identified rather than guessed.
 
-Only consider live-site installation after all staging checks pass and Rob
-explicitly approves it.
+Only consider live-site installation after all staging checks pass and the
+webservant explicitly approves it.
 
 ## 9. Risks and unknowns
 

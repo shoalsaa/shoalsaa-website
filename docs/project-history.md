@@ -1,5 +1,24 @@
 # Project history
 
+## 2026-11-27
+
+- Folded the nested `shoalsaa-website/` folder into the top level and
+  deleted it (commit `834a235`). Test target changed from test.shoalsaa.org
+  to dev.shoalsaa.org; added the DreamHost deploy workflow
+  (`docs/deploy.md`).
+- Reviewed the repository for conflicting instructions; findings and
+  recommendations are in `docs/claude-status.md`.
+- PR #4: ignore `/vendor/` and commit `composer.lock`.
+- PR #5: recipient typo fixed; "Branching and merge" rule (merge to `main`
+  only after Stage 1); dev is the single backup source for local restores;
+  separate daily and monthly inventory snapshots.
+- Design decisions recorded in the design doc: it is the build
+  specification; monthly usage covers an exact reporting period; schedules
+  use the site time zone (America/Chicago); "read-only" means the plugin
+  writes only its own options and WP-Cron events; live approval belongs to
+  the webservant office. Retired nested-folder notes moved to
+  `docs/archive/`.
+
 ## 2026-11-22
 
 - Worked with Docker Desktop's Gordon AI to create a project-specific local
@@ -16,9 +35,8 @@
   returned HTTP 200 and showed the WordPress installation screen. MySQL and
   Mailpit were healthy when checked.
 - Synchronized the nested `docker-compose.yml` with the root configuration
-  for merge parity. Its relative build and mount paths assume the repository
-  root, so do not run the nested copy as a standalone stack before the project
-  merge/consolidation is complete.
+  for merge parity. (Superseded: the nested folder was removed on
+  27 November 2026.)
 - The test site backup has not yet been added. Store the working copy under
   the root `local-backups/wpvivid/` directory, which is excluded from Git;
   never stage or publish the backup.

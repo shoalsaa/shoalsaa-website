@@ -57,9 +57,10 @@ and keep the root and nested Compose files aligned for the unfinished merge.
 
 Reviewed the generated configuration against the nested project copy and
 confirmed that the root `docker-compose.yml` is the configuration currently
-applied. The nested Compose file was synchronized with it for merge parity;
-its relative paths assume the repository root, so do not run it standalone
-from the nested directory. After removing the application that previously
+applied. The nested Compose file was synchronized with it for merge parity.
+(The nested folder was folded into the top level and deleted on
+27 November 2026, commit `834a235`; only the root `docker-compose.yml`
+exists now.) After removing the application that previously
 occupied port 8080 and restarting Windows, the stack was running on
 `localhost:8080` and returned HTTP 200 with the WordPress installation screen.
 

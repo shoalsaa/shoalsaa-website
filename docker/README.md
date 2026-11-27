@@ -64,5 +64,5 @@ This is Stage 1 of the testing plan. Complete it before Stage 2 on
 - Stop with `docker compose down`. Add `-v` to wipe the database and start
   completely fresh: `docker compose down -v`. ASK for permission before doing this.
 - Nothing here talks to shoalsaa.org, dev.shoalsaa.org, or DreamHost directly.
-- All plugin code should meet the WordPress coding standards (see <https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/README.md#minimum-requirements>). Set up VS Code with the recommended extensions (`.vscode/extensions.json`).
+- All plugin code should meet the WordPress coding standards (see <https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/>). Set up VS Code with the recommended extensions (`.vscode/extensions.json`).
 - Install the WordPress standards: `composer config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true` then `composer require --dev wp-coding-standards/wpcs:"^3.0"`.

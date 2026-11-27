@@ -38,5 +38,5 @@ jobs:
             sleep 10
           done
           curl --fail --silent "${wordpress_url}/" >/dev/null
-      # The endpoint smoke test (REST routes, PDF generation) lands with the
-      # plugin code; see tests/README.md.
+      # A plugin smoke test (activation, cron events, both emails to Mailpit)
+      # lands with the plugin code; see tests/README.md.
