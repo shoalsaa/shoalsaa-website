@@ -41,9 +41,13 @@ These paths exist in both repositories. Do not copy over them wholesale; merge o
 | `.github/workflows/ci.yml` | Different CI workflows. Merge required checks rather than replacing the destination workflow. |
 | `tests/bootstrap.php` | Different setup: MEC loads MEC classes and WordPress stubs; ShoalsAA loads its Composer/Brain Monkey harness. Integrate, do not overwrite. |
 
-### Docker port discrepancy
+### Docker port discrepancy — resolved
 
-The inspected `docker-compose.yml` maps WordPress to port **8082**, while destination documentation and CI refer to **8080**. Verify and reconcile this before relying on the Docker setup.
+The root `docker-compose.yml` now matches the tested copy: WordPress is
+available at `http://localhost:8080`. The root compose file is the definitive
+source for the local test environment, including service names, ports, and
+test-only database values. Documentation and CI should refer to it rather
+than define a second configuration.
 
 ## Paths present in MEC but not at the destination root
 

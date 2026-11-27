@@ -91,9 +91,3 @@ secrets instead; only `DH_SITE_PATH` then differs per environment.
 The deploy key is a district secret. List it in the succession plan, keep it
 in the vault, and rotate it at every handover: remove its line from
 `authorized_keys`, make a new key, and update the `DH_SSH_KEY` secret.
-
-## Also worth doing on dev
-
-dev.shoalsaa.org does not send a noindex tag (checked 27 November 2026), so a
-copy of the public site may be getting indexed. Tick "Discourage search
-engines" in WP Admin → Settings → Reading on dev only.
