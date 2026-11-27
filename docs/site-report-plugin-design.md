@@ -6,7 +6,9 @@ District 1, Area 1 AA — shoalsaa.org
 
 19 November 2026 — Prepared for Rob G., District 1 Web-Committee Chair
 
-Status: second pass, for review. This is a design, not a build specification. Nothing in it is decided until the open decisions in §12 are answered. All development and testing happen on a local Docker WordPress implementation, then test.shoalsaa.org; nothing goes on the live site (<https://www.shoalsaa.org>) until Rob has tested it there.
+Updated 27 November 2026: the remote test target is now <https://dev.shoalsaa.org>, replacing test.shoalsaa.org. Plugin code reaches it through the automated deploy in `docs/deploy.md`. Facts recorded on test.shoalsaa.org before this date are kept as history and marked as such.
+
+Status: second pass, for review. This is a design, not a build specification. Nothing in it is decided until the open decisions in §12 are answered. All development and testing happen on a local Docker WordPress implementation, then dev.shoalsaa.org; nothing goes on the live site (<https://www.shoalsaa.org>) until Rob has tested it there.
 
 ## 1. Purpose
 
@@ -30,7 +32,7 @@ Decisions already made (15 November 2026) and carried into this design:
 
 - The reports do not need to be exact to the minute or visit. Rolling-month widget figures are acceptable, with the period they cover stated in the report.
 
-- Every report states the origin site's own URL at the top, so the recipient can tell which site sent it — live: <https://www.shoalsaa.org>; test: <https://test.shoalsaa.org>. The URL is that of the site the report was generated from, never a hardcoded live-site URL.
+- Every report states the origin site's own URL at the top, so the recipient can tell which site sent it — live: <https://www.shoalsaa.org>; test: <https://dev.shoalsaa.org>. The URL is that of the site the report was generated from, never a hardcoded live-site URL.
 
 - Reports go to <webservant@shoalsaa.org>, the district webservant mailbox, which is meant to move with the office when it changes hands — not to Rob's personal email.
 
@@ -51,7 +53,7 @@ Every item below is data the reports already use today, read from inside WordPre
 
 ## 5. How the phase two plugin exposes data
 
-**Primary interface — WordPress Abilities, exposed over MCP.** WordPress 6.9 added the Abilities API to core: a plugin registers named abilities (one action each, with a description, input/output schema, and a permission check). The official MCP Adapter plugin (WordPress.org, version 0.7.1, already installed and active on test.shoalsaa.org) turns registered abilities into MCP tools at the endpoint <https://test.shoalsaa.org/wp-json/mcp/mcp-adapter-default-server> (live site: <https://www.shoalsaa.org/wp-json/mcp/mcp-adapter-default-server>).
+**Primary interface — WordPress Abilities, exposed over MCP.** WordPress 6.9 added the Abilities API to core: a plugin registers named abilities (one action each, with a description, input/output schema, and a permission check). The official MCP Adapter plugin (WordPress.org, version 0.7.1; installed on the former test site test.shoalsaa.org on 15 November 2026, not installed on dev.shoalsaa.org as of 27 November 2026) turns registered abilities into MCP tools at the endpoint <https://dev.shoalsaa.org/wp-json/mcp/mcp-adapter-default-server> once installed there (live site: <https://www.shoalsaa.org/wp-json/mcp/mcp-adapter-default-server>).
 
 The exposure rule matters and works in our favour: abilities are private by default. Only abilities that explicitly set their public flag (meta.public / meta.mcp.public) become MCP tools; anything unflagged or malformed fails closed and is not exposed. The plugin will register exactly the abilities the reports need, each flagged public, and nothing else. Suggested abilities:
 
@@ -123,9 +125,9 @@ Unchanged from today, deliberately. The scheduled jobs keep building the monthly
 
 - No secrets in code. The plugin ships with no passwords, keys, or tokens. The only credential in the whole design is the application password, held in the district vault — never in the plugin, never in a document, never in chat.
 
-- Named, revocable key. One key, one purpose, one name. Revoked on every handover and whenever there is doubt about it. A revoked test key (“Muse reporting (test)”, 15 November 2026) was already exercised end to end on the test site, including the revoke step.
+- Named, revocable key. One key, one purpose, one name. Revoked on every handover and whenever there is doubt about it. A revoked test key (“Muse reporting (test)”, 15 November 2026) was already exercised end to end on the former test site (test.shoalsaa.org), including the revoke step.
 
-- Test-site first. All development and testing on test.shoalsaa.org. Nothing is installed on the live site until Rob has tested it there himself.
+- Test-site first. All development and testing on dev.shoalsaa.org, after the local Docker stack. Plugin code reaches dev only through the automated deploy (`docs/deploy.md`), after CI passes. Nothing is installed on the live site until Rob has tested it there himself.
 
 - Version pinning. The MCP Adapter is pre-1.0 (0.7.1); pin its version and record both plugins' versions in the manual at the next sync, the same way other plugin versions are recorded.
 
@@ -135,7 +137,7 @@ Unchanged from today, deliberately. The scheduled jobs keep building the monthly
 
 ## 11. Testing plan (local Docker implementation, followed by testing on the live externally hosted test site)
 
-All remote steps are on <https://test.shoalsaa.org>, signed in as districtone. The live site (<https://www.shoalsaa.org>) is not touched until every test passes and a human with write access to the GitHub repository says so.
+All remote steps are on <https://dev.shoalsaa.org>, signed in as districtone. The plugin files arrive there by the automated deploy (`docs/deploy.md`) when CI passes on `main`; activating the plugin is a manual step in WP Admin. The live site (<https://www.shoalsaa.org>) is not touched until every test passes and a human with write access to the GitHub repository says so.
 
 Phase 1
 
@@ -179,7 +181,7 @@ For Phase 2, if it happens
 
 - Cloudflare exact-period figures need a token that may not exist (§8).
 
-- The MCP Adapter on the test site exposes, as far as could be verified on 15 November 2026, most likely no tools by default — abilities are private unless flagged public, and nothing on the site is flagged. The reporting plugin is what creates the tools; the adapter alone creates none.
+- The MCP Adapter on the former test site (test.shoalsaa.org) exposed, as far as could be verified on 15 November 2026, most likely no tools by default — abilities are private unless flagged public, and nothing on the site is flagged. The reporting plugin is what creates the tools; the adapter alone creates none.
 
 ## Appendix A — Verified facts this design rests on
 
@@ -187,15 +189,15 @@ All checked 15 November 2026 unless dated otherwise. Nothing here is assumed.
 
 - WordPress 7.1.4, PHP 8.4.27, MySQL 8.4.11, Kadence Child 1.0.0; 14 regular plugins (13 active, 1 inactive) plus must-use Burst REST API Optimizer 1.3.0.
 
-- Saved districtone login verified working by fresh cloud-browser sign-ins on both the live site and test.shoalsaa.org (15 November 2026, first attempt, no errors). The 14 November live-site rejection was a one-off; its cause is unknown.
+- Saved districtone login verified working by fresh cloud-browser sign-ins on both the live site and the former test site test.shoalsaa.org (15 November 2026, first attempt, no errors). The 14 November live-site rejection was a one-off; its cause is unknown.
 
 - Daily inventory run 15 November 2026, 08:40–09:01, succeeded and emailed <webservant@shoalsaa.org> — the first successful run since 10 November.
 
-- MCP Adapter 0.7.1 installed and activated on test.shoalsaa.org (15 November 2026); endpoint <https://test.shoalsaa.org/wp-json/mcp/mcp-adapter-default-server> confirmed, 401 without authentication; the plugin adds no admin/settings page.
+- MCP Adapter 0.7.1 installed and activated on the former test site test.shoalsaa.org (15 November 2026); endpoint <https://test.shoalsaa.org/wp-json/mcp/mcp-adapter-default-server> confirmed, 401 without authentication; the plugin adds no admin/settings page.
 
 - Abilities are private by default; only flagged-public abilities become MCP tools. The full runtime abilities list could not be retrieved from a browser (401 — no Authorization header); the default server most likely exposes no tools.
 
-- Test application password “Muse reporting (test)” created and revoked on the test site 15 November 2026; never used; revocation verified (Profile page shows no password list). The revoke button's JavaScript confirmation dialog cannot be completed by browser automation — a person must click Revoke and then OK.
+- Test application password “Muse reporting (test)” created and revoked on the former test site (test.shoalsaa.org) 15 November 2026; never used; revocation verified (Profile page shows no password list). The revoke button's JavaScript confirmation dialog cannot be completed by browser automation — a person must click Revoke and then OK.
 
 - Cloudflare dashboard widget: Day / Week / Month / Year only, no custom range; Month is a rolling last 30 days (16 October–14 November when checked 15 November 2026: 22.25k visitors, 453.35k requests, 36.57% cached, 4 GB served, 23k threats); the Year button does not refresh the widget.
 
@@ -215,7 +217,9 @@ All checked 15 November 2026 unless dated otherwise. Nothing here is assumed.
 
 - Changes history: ~/workspace/goals/shoalsaa-website-manual/hidden_files/site-changes-log.md plus daily-inventory-YYYY-MM-DD.md logs in the same directory.
 
-- Test site: <https://test.shoalsaa.org> (MCP Adapter 0.7.1 installed there, 15 November 2026).
+- Test site: <https://dev.shoalsaa.org> (WordPress 7.1.5, Kadence, behind Cloudflare, on DreamHost; MCP Adapter not installed, checked 27 November 2026). Plugin deploys: `.github/workflows/deploy.yml`, setup in `docs/deploy.md`.
+
+- Former test site: <https://test.shoalsaa.org> (MCP Adapter 0.7.1 installed there, 15 November 2026). Replaced by dev.shoalsaa.org on 27 November 2026.
 
 - Live site: <https://www.shoalsaa.org>. MCP Adapter is NOT installed on the live site.
 
@@ -232,6 +236,6 @@ All checked 15 November 2026 unless dated otherwise. Nothing here is assumed.
 | Updates pending (core, plugins, themes) | wp_get_update_data() / update transients | Counts and available versions; empty when nothing is pending. |
 | Burst usage (visitors, pageviews, sessions, date range) | Burst's own database tables or REST endpoints — TO BE VERIFIED on the test site | Burst 3.7.5. Exact period (e.g. 16 Oct–15 Nov 2026: 354 visitors, 902 pageviews, 570 sessions) comes from the Burst statistics page today; the plugin must find the same data at its source. Do not assume table names — confirm during the build. |
 | Cloudflare statistics | Rolling or exact-period usage   exact is preferred, rolling is acceptable for phase. | The only exact-period source is the Cloudflare API; the dashboard widget provides rolling-period values. |
-| WPvivid backup status (version, schedule, last/next backup, last result) | WPvivid's stored options — TO BE VERIFIED on the test site <https://test.shoalsaa.org>. | WPvivid 0.9.140. Schedule is Monthly; last backup 13 Nov 2026 14:50 (Succeeded); next 30 Nov 2026 00:02. The backup deep-check is on hold, but version + last/next backup are cheap to expose. Confirm the option names during the build. |
+| WPvivid backup status (version, schedule, last/next backup, last result) | WPvivid's stored options — TO BE VERIFIED on the test site <https://dev.shoalsaa.org>. | WPvivid 0.9.140. Schedule is Monthly; last backup 13 Nov 2026 14:50 (Succeeded); next 30 Nov 2026 00:02. The backup deep-check is on hold, but version + last/next backup are cheap to expose. Confirm the option names during the build. |
 | Changes since last report (version moves, plugins added/removed) | Plugin-kept snapshot. | The plugin stores the last inventory it produced and reports what moved. This replaces the external changes log for version changes. Content edits are a separate question — see §12. |
 | Phase 2 Cloudflare usage | Not available to the plugin without a Cloudflare API token — see §8 | The plugin cannot invent these numbers. |
